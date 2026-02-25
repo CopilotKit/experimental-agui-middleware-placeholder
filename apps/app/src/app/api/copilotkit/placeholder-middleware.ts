@@ -71,7 +71,21 @@ export class PlaceholderMiddleware extends Middleware {
             return;
           }
 
-          // --- transform / inspect events here ---
+          // --- intercept custom events from the agent ---
+
+          if (event.type === EventType.CUSTOM) {
+            const { name, value } = event as CustomEvent;
+            console.log(`[middleware] custom event: ${name}`, value);
+
+            // Convert "todos_updated" into a chat message the UI can render
+            if (name === "todos_updated") {
+              const msgId = crypto.randomUUID();
+              subscriber.next({ type: EventType.TEXT_MESSAGE_START, messageId: msgId, role: "assistant" } as TextMessageStartEvent);
+              subscriber.next({ type: EventType.TEXT_MESSAGE_CONTENT, messageId: msgId, delta: value.summary } as TextMessageContentEvent);
+              subscriber.next({ type: EventType.TEXT_MESSAGE_END, messageId: msgId } as TextMessageEndEvent);
+              return; // swallow the original CUSTOM event
+            }
+          }
 
           subscriber.next(event);
         },

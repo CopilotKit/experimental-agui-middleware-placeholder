@@ -1,6 +1,7 @@
 from langchain.agents import AgentState as BaseAgentState
 from langchain.tools import ToolRuntime, tool
 from langchain.messages import ToolMessage
+from langchain_core.callbacks import dispatch_custom_event
 from langgraph.types import Command
 from typing import TypedDict, Literal
 import uuid
@@ -24,6 +25,15 @@ def manage_todos(todos: list[Todo], runtime: ToolRuntime) -> Command:
     for todo in todos:
         if "id" not in todo or not todo["id"]:
             todo["id"] = str(uuid.uuid4())
+
+    # Emit a custom event that the middleware can intercept
+    dispatch_custom_event(
+        "todos_updated",
+        {
+            "total": len(todos),
+            "summary": f"Updated todo list — now {len(todos)} items",
+        },
+    )
 
     # Update the state
     return Command(update={
