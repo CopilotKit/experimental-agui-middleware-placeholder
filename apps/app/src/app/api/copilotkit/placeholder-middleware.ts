@@ -77,7 +77,6 @@ export class PlaceholderMiddleware extends Middleware {
             const { name, value } = event as CustomEvent;
             console.log(`[middleware] custom event: ${name}`, value);
 
-            // Convert "todos_updated" into a chat message the UI can render
             if (name === "todos_updated") {
               const msgId = crypto.randomUUID();
               subscriber.next({ type: EventType.TEXT_MESSAGE_START, messageId: msgId, role: "assistant" } as TextMessageStartEvent);
