@@ -30,6 +30,11 @@ const agent = new ZoomInfoLangGraphSSEAgent({
   // but we override run() so it won't actually connect here
   deploymentUrl: process.env.ZOOMINFO_LANGGRAPH_URL || "http://localhost:8123",
   graphId: process.env.ZOOMINFO_GRAPH_ID || "zoominfo_agent",
+  // -- Auth: uncomment whichever ZoomInfo needs --
+  // propertyHeaders: {
+  //   "Authorization": `Bearer ${process.env.ZOOMINFO_AUTH_TOKEN}`,
+  //   // "x-api-key": process.env.ZOOMINFO_API_KEY,
+  // },
   // This is the ZoomInfo SSE endpoint we actually read from
   zoomInfoSSEUrl:
     process.env.ZOOMINFO_SSE_URL || "http://localhost:4000/api/chat/stream",

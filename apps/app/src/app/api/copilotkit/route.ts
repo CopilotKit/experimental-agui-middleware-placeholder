@@ -38,8 +38,13 @@ class CustomEventForwardingAgent extends LangGraphAgent {
 // 1. Define the agent connection to LangGraph
 const defaultAgent = new CustomEventForwardingAgent({
   deploymentUrl: process.env.LANGGRAPH_DEPLOYMENT_URL || "http://localhost:8123",
-  graphId: "sample_agent",
-  langsmithApiKey: process.env.LANGSMITH_API_KEY || "",
+  graphId: process.env.LANGGRAPH_GRAPH_ID || "sample_agent",
+  // -- Auth: uncomment whichever ZoomInfo needs --
+  // langsmithApiKey: process.env.LANGSMITH_API_KEY,  // if LangGraph Cloud
+  // propertyHeaders: {                               // if self-hosted
+  //   "Authorization": `Bearer ${process.env.ZOOMINFO_AUTH_TOKEN}`,
+  //   // "x-api-key": process.env.ZOOMINFO_API_KEY,
+  // },
 });
 
 // 2. Bind in middleware to the agent. For A2UI and MCP Apps.
